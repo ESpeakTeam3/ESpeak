@@ -1,14 +1,10 @@
 package org.espeakng.jeditor.jni;
 
-import java.util.logging.Logger;
-
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 public class ESpeakServiceTest {
-	
-}
-/*	
-	static Logger log = Logger.getLogger(ESpeakServiceTest.class);
+	static Logger log = Logger.getLogger(ESpeakServiceTest.class.getName());
 
 	@Test
 	public void testNativeGetEspeakNgVersion() {
@@ -27,4 +23,4 @@ public class ESpeakServiceTest {
 		System.out.println(s.name + ":" + s.amplitude);
 	}
 
-}*/
+}

@@ -7,13 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.espeakng.jeditor.utils.*;
 
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 
 /**
  * The class utilizes functionality of espeak-ng program (which is run on
@@ -45,6 +42,12 @@ public class EspeakNg {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
+	
+	/**
+	 * Saves chosen voice variant
+	 */
+	private static String voiceVariant = "";
+	
 	public EspeakNg(MainWindow mainW) {
 		this.mainW = mainW;
 	}
@@ -75,6 +78,7 @@ public class EspeakNg {
 		
 		// Command for espeak-ng is constructed as required and executed on terminal:
 		makeRunTimeAction(getRunTimeCommand(command));
+		
 		// No need for source file any more:
 		fileInput.delete();
 		
@@ -82,6 +86,10 @@ public class EspeakNg {
 		if (!(command.equals("speakPunc") || command.equals("speakBySymbol") || command.equals("speakCharName")   || command.equals("speak"))) {
 			readOutputFile();
 		}
+	}
+	
+	public void makeAction(String command, String[] params) {
+		
 	}
 
 	/**
@@ -128,7 +136,6 @@ public class EspeakNg {
 		case "speakBySymbol":
 			runTimeCommand = "espeak-ng -v" + voice + " -s" + speedVoice + " --punct=',;?<>@#.$%^&*()\""
 					+ mainW.textAreaIn.getText() + "\"";
-			System.out.println(runTimeCommand);
 			break;
 		default:
 			break;
@@ -192,7 +199,6 @@ public class EspeakNg {
 	private void createFileInput(String text) {
 
 		try {
-
 			fileInput = new File("MyFile.txt");
 			FileWriter fileWriter = new FileWriter(fileInput);
 			fileWriter.write(text);
@@ -232,42 +238,43 @@ public class EspeakNg {
 			text = m.replaceAll("").replaceAll(".(?!$)", "$0 ");
 			return text;
 		} 
-		// speakCharName - spell as syllables
-		else if (command.equals("speakCharName")) {
-            StringBuilder sbnew = new StringBuilder(text);
-		    int lenght = text.length();
-		    StringBuilder c = new StringBuilder();
-		    for(int i =0; i<lenght;i++){
-		        text=sbnew.charAt(i)+"";
-		        //text matches vowels and next character is not space then append
-		        if(text.matches("[AEIOUYaeiouy]+")&&(sbnew.charAt(i+1)!=' ')){
-		            c.append(text+' ');
-		        }else{
-		            c.append(text);
+		
+		if (command.equals("speakCharName")) {
+			StringBuilder c = new StringBuilder();
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		        String character = String.valueOf(text.charAt(i));
+		    	
+		        // if text matches vowels and next character is not space then put space
+		        if (character.matches("[AEIOUYaeiouy]+") && (i + 1 < text.length()) && (text.charAt(i+1) != ' ')) {
+		            c.append(text.charAt(i)+' ');
+		        } else {
+		            c.append(text.charAt(i));
 		        }
-		       
 		    }
+		    
 		    return c.toString();
-		    //text = sbnew.toString();
 		}
-		// speakPunc - Only Punctuation is spelled
-		else if (command.equals("speakPunc")) {
-            StringBuilder sbnew = new StringBuilder(text);
-		    int lenght = text.length();
-		    StringBuilder temp = new StringBuilder();
-		    for(int i=0; i<lenght;i++){
-		        text=sbnew.charAt(i)+"";
-		        //text matches alphabets and next character is not space then append
-		        if(text.matches("[a-zA-Z]+")){
-		            temp.append(' ');
-		        }else{
-		            temp.append(text);
+		
+		if (command.equals("speakPunc")) {
+		    StringBuilder sb = new StringBuilder();
+		    String character;
+		    
+		    for (int i = 0; i < text.length(); i++) {
+		    	character = String.valueOf(text.charAt(i));
+		    	
+		        if (character.matches("[a-zA-Z]+")) {
+		            sb.append(' ');
+		        } else {
+		            sb.append(character);
 		        }
 		    }
-		    return temp.toString();
+		    
+		    return sb.toString();
 		}
+		
 		return text;
-		}
+	}
 	/**
 	 * This method sets pronunciation rules depending on chosen voice (Voice ->
 	 * Select Voice). It returns string "en", "ru", "lv" or "pl".
@@ -294,7 +301,17 @@ public class EspeakNg {
 		if (text.equals("Polish"))
 			voice = "pl";
 
+		if(!voiceVariant.equals(""))
+			voice +="+"+voiceVariant;
 		return voice;
+	}
+
+	public String getVoiceVariant() {
+		return voiceVariant;
+	}
+
+	public void setVoiceVariant(String voiceVariant) {
+		EspeakNg.voiceVariant = voiceVariant;
 	}
 	
 
