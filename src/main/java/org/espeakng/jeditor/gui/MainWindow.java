@@ -103,8 +103,6 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmCompilePhonemeData;
 	public JMenuItem mntmCompileMbrolaPhonemes;
 	public JMenuItem mntmCompileIntonationData;
-	public JMenuItem mntmLayoutrulesFile;
-	public JMenuItem mntmSortrulesFile;
 	// menuBar group Help
 	public JMenu mnHelp;
 	public JMenuItem mntmEspeakDocumentation;
@@ -457,12 +455,6 @@ public class MainWindow extends JFrame {
 
 		JSeparator separator_4 = new JSeparator();
 		mnCompile.add(separator_4);
-
-		mntmLayoutrulesFile = new JMenuItem("Layout '_rules' file");
-		mnCompile.add(mntmLayoutrulesFile);
-
-		mntmSortrulesFile = new JMenuItem("Sort '_rules' file");
-		mnCompile.add(mntmSortrulesFile);
 		
 		////////////////
 		// Help group //
