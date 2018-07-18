@@ -331,7 +331,7 @@ public class EventHandlers {
 	};
 
 	// requires espeak-ng library
-	// speaking without ignoring punctuation (says "dot" where is ".")
+	// speaking only punctuation ingnoring words (says "dot" where is ".")
 	ActionListener speakPunc = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);
@@ -356,6 +356,8 @@ public class EventHandlers {
 		}
 	};
 	
+	// requires espeak-ng library
+	// splits words at vowels and spells as syllables
 	ActionListener speakCharName = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			EspeakNg espeakNg = new EspeakNg(mainW);

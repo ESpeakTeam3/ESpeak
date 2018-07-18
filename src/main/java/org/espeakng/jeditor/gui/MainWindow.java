@@ -563,31 +563,31 @@ public class MainWindow extends JFrame {
 		panel_Spect.add(label_0);
 		
 		JLabel label_1 = new JLabel("1");
-		label_1.setBounds(6, 53, 8, labelHeight);
+		label_1.setBounds(6, 53, 18, 21);
 		panel_Spect.add(label_1);
 		
 		JLabel label_2 = new JLabel("2");
-		label_2.setBounds(6, 75, 8, labelHeight);
+		label_2.setBounds(6, 75, 8, 32);
 		panel_Spect.add(label_2);
 		
 		JLabel label_3 = new JLabel("3");
-		label_3.setBounds(6, 97, 8, labelHeight);
+		label_3.setBounds(6, 97, 8, 32);
 		panel_Spect.add(label_3);
 		
 		JLabel label_4 = new JLabel("4");
-		label_4.setBounds(6, 119, 8, labelHeight);
+		label_4.setBounds(6, 119, 8, 37);
 		panel_Spect.add(label_4);
 		
 		JLabel label_5 = new JLabel("5");
-		label_5.setBounds(6, 141, 8, labelHeight);
+		label_5.setBounds(6, 141, 8, 37);
 		panel_Spect.add(label_5);
 		
 		JLabel label_6 = new JLabel("6");
-		label_6.setBounds(6, 163, 8, labelHeight);
+		label_6.setBounds(6, 163, 21, 37);
 		panel_Spect.add(label_6);
 		
 		JLabel label_7 = new JLabel("7");
-		label_7.setBounds(6, 185, 8, labelHeight);
+		label_7.setBounds(6, 185, 18, 37);
 		panel_Spect.add(label_7);
 		
 		JTextField tfFreq0 = new JTextField();

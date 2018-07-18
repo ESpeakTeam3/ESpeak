@@ -232,18 +232,16 @@ public class EspeakNg {
 			text = m.replaceAll("").replaceAll(".(?!$)", "$0 ");
 			return text;
 		} 
+		// speakCharName - spell as syllables
 		else if (command.equals("speakCharName")) {
-            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
+            StringBuilder sbnew = new StringBuilder(text);
 		    int lenght = text.length();
-		    StringBuilder c = new StringBuilder();//Create another String Builder
+		    StringBuilder c = new StringBuilder();
 		    for(int i =0; i<lenght;i++){
 		        text=sbnew.charAt(i)+"";
-		        //text matches vowels and next character is not space then put space
+		        //text matches vowels and next character is not space then append
 		        if(text.matches("[AEIOUYaeiouy]+")&&(sbnew.charAt(i+1)!=' ')){
 		            c.append(text+' ');
-		            System.out.println(c.toString());
-		          //printing out result in console
-		           
 		        }else{
 		            c.append(text);
 		        }
@@ -252,17 +250,16 @@ public class EspeakNg {
 		    return c.toString();
 		    //text = sbnew.toString();
 		}
+		// speakPunc - Only Punctuation is spelled
 		else if (command.equals("speakPunc")) {
-            StringBuilder sbnew = new StringBuilder(text);//Create String Builder
+            StringBuilder sbnew = new StringBuilder(text);
 		    int lenght = text.length();
-		    StringBuilder temp = new StringBuilder();//Create another String Builder
+		    StringBuilder temp = new StringBuilder();
 		    for(int i=0; i<lenght;i++){
 		        text=sbnew.charAt(i)+"";
+		        //text matches alphabets and next character is not space then append
 		        if(text.matches("[a-zA-Z]+")){
 		            temp.append(' ');
-		            System.out.println(temp.toString());
-		            //printing out result in console
-		           
 		        }else{
 		            temp.append(text);
 		        }
