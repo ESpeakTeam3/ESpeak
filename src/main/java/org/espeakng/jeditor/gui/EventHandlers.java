@@ -44,11 +44,8 @@ public class EventHandlers {
 	private Preferences prefs;
     private File file;
     // Files required for buttons. Do not delete.
-    private File masterPhFile = new File("../espeak-ng/phsource/phonemes");
-    private File phonemeSource = new File("../espeak-ng/phsource");
-    private File dictSource = new File("../espeak-ng/dictsource");
-    private File WAVFile;
-    private File voiceFile;
+    private File[] files = {new File("../espeak-ng/phsource/phonemes"), new File("../espeak-ng/phsource"), 
+    		new File("../espeak-ng/dictsource"), null, null};
     // ******************************************
     private EspeakNg espeakNg;
     private String dataPath = new File("../espeak-ng").getAbsolutePath();
@@ -316,7 +313,7 @@ public class EventHandlers {
 	
 	ActionListener selectVoice = new ActionListener() {
 		public void actionPerformed(ActionEvent a) {
-			// String file8 = "en";
+			// String file8 = "en";mntmMasterPhonemesFile
 			if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) {
 				prefs.put("", fileChooser.getSelectedFile().getParent());
 				System.out.println(fileChooser.getName(fileChooser.getSelectedFile()));
@@ -337,12 +334,10 @@ public class EventHandlers {
 	};
 	
 	ActionListener viaFileChooser = new ActionListener() {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			usingFileChooser();
 		}
-		
 	};
 	
 	private File usingFileChooser(){
@@ -356,52 +351,26 @@ public class EventHandlers {
 		return null;
 	}
 	
-	ActionListener setMasterPhoneme = new ActionListener() {
+	ActionListener setFile = new ActionListener() {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			File temp = usingFileChooser();
 			if (temp != null) {
-				masterPhFile = temp;
-			}
-		}
-	};
-	
-	ActionListener setDictSource = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			File temp = usingFileChooser();
-			if (temp != null) {
-				dictSource = temp;
-			}
-		}
-	};
-	
-	ActionListener setPhonemeSource = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			File temp = usingFileChooser();
-			if (temp != null) {
-				phonemeSource = temp;
-			}
-		}
-	};
-	
-	ActionListener setWAVFile = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			File temp = usingFileChooser();
-			if (temp != null) {
-				WAVFile = temp;
-			}
-		}
-	};
-	
-	ActionListener setVoiceFile = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			File temp = usingFileChooser();
-			if (temp != null) {
-				voiceFile = temp;
+				if (e.getSource() == mainW.mntmMasterPhonemesFile) {
+					files[0] = temp;
+				}
+				if (e.getSource() == mainW.mntmPhonemeDataSource) {
+					files[1] = temp;
+				}
+				if (e.getSource() == mainW.mntmDictionaryDataSource) {
+					files[2] = temp;
+				}
+				if (e.getSource() == mainW.mntmSynthesizedSoundWAVfile) {
+					files[3] = temp;
+				}
+				if (e.getSource() == mainW.mntmVoiceFileToModifyFormantPeaks) {
+					files[4] = temp;
+				}
 			}
 		}
 	};
@@ -460,7 +429,7 @@ public class EventHandlers {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompileDictionary || e.getSource() == mainW.mntmCompileDictionarydebug) {
-				fileChooser.setCurrentDirectory(dictSource);
+				fileChooser.setCurrentDirectory(files[2]);
   				if (fileChooser.showOpenDialog(mainW) == JFileChooser.APPROVE_OPTION) { 
   					String cmd = "export ESPEAK_DATA_PATH="+ dataPath +
   							"; cd " + fileChooser.getSelectedFile().getParent() +
@@ -476,8 +445,8 @@ public class EventHandlers {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == mainW.mntmCompilePhonemeData) {
 				String cmd = "export ESPEAK_DATA_PATH=" + new File("../espeak-ng").getAbsolutePath()
-						+ "; cd " + phonemeSource.getParent() + " && "
-						+ dataPath + "/src/espeak-ng --compile-phonemes=" + phonemeSource.getName();
+						+ "; cd " + files[1].getParent() + " && "
+						+ dataPath + "/src/espeak-ng --compile-phonemes=" + files[1].getName();
 				CommandUtilities.executeCmd(cmd);
 			}
 		}
@@ -561,11 +530,11 @@ public class EventHandlers {
 
 		// Options
 
-		mainW.mntmMasterPhonemesFile.addActionListener(setMasterPhoneme);
-		mainW.mntmPhonemeDataSource.addActionListener(setPhonemeSource);
-		mainW.mntmDictionaryDataSource.addActionListener(setDictSource);
-		mainW.mntmSynthesizedSoundWAVfile.addActionListener(setWAVFile);
-		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(setVoiceFile);
+		mainW.mntmMasterPhonemesFile.addActionListener(setFile);
+		mainW.mntmPhonemeDataSource.addActionListener(setFile);
+		mainW.mntmDictionaryDataSource.addActionListener(setFile);
+		mainW.mntmSynthesizedSoundWAVfile.addActionListener(setFile);
+		mainW.mntmVoiceFileToModifyFormantPeaks.addActionListener(setFile);
 		mainW.mntmEnglish.addActionListener(event);
 		mainW.mntmLatvian.addActionListener(event);
 		mainW.mntmRussian.addActionListener(event);
