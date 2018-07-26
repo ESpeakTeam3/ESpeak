@@ -1,9 +1,11 @@
 package org.espeakng.jeditor.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -13,13 +15,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.TreeMap;
+
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+
+import org.espeakng.jeditor.data.Frame;
 
 import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Command;
@@ -34,6 +41,12 @@ import org.espeakng.jeditor.utils.Utilities;
 import org.espeakng.jeditor.utils.WrapLayout;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -45,6 +58,8 @@ public class EventHandlers {
 	
 	private static Logger logger = Logger.getLogger(EspeakNg.class.getName());
 	private MainWindow mainW;
+	private JPanel spectrumPanel;
+
 	private JFileChooser fileChooser;
 	private Preferences prefs;
     // Files required for buttons. Do not delete.
@@ -146,6 +161,8 @@ public class EventHandlers {
 				PhonemeLoad.zoomIn((JScrollPane) MainWindow.tabbedPaneGraphs.getSelectedComponent());
 			} else if (e.getSource() == mainW.mntmExportGraph||e.getSource() == mainW.exportMI) {
 				exportGraphImage();
+			} else if (e.getSource() == mainW.panel_Spect){
+				mainW.panel_Spect.repaint();
 			}
 		}
 		
@@ -249,7 +266,6 @@ public class EventHandlers {
 		mainW.mntmClose.setVisible(false);
 		mainW.mntmCloseAll.setVisible(false);
 	};
-
 
 	private class MakeActionListener implements ActionListener {
 

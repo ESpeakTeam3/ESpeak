@@ -15,24 +15,25 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.log4j.Logger;
 import org.espeakng.jeditor.data.Frame;
+import org.espeakng.jeditor.data.Phoneme;
 import org.espeakng.jeditor.data.PhonemeLoad;
+//import org.espeakng.jeditor.data.SpectrumGraph;
 
 
 /**
- * This class is an entry point for the program.
- * It does all the initial preparations for the program to start,
- * builds the main window interface.
+ * This class is an entry point for the program. It does all the initial
+ * preparations for the program to start, builds the main window interface.
  *
  */
 
 public class MainWindow extends JFrame {
+	public static JPanel panelSpectrumGraph;
     private static Logger logger = Logger.getLogger(MainWindow.class.getName());
 
 	private static final long serialVersionUID = 6548939748883665055L;
@@ -62,7 +63,7 @@ public class MainWindow extends JFrame {
 	public JMenuItem mntmStop;
 	// menuBar group Voice
 	public JMenu mnVoice;
-	//public JMenuItem mntmSelectVoice;
+	// public JMenuItem mntmSelectVoice;
 	public JMenuItem mntmSelectVoiceVariant;
 	public ButtonGroup groupOfVoices;
 	public JMenu mnSelectVoice;
@@ -110,7 +111,7 @@ public class MainWindow extends JFrame {
 	public JMenu mnHelp;
 	public JMenuItem mntmEspeakDocumentation;
 	public JMenuItem mntmAbout;
-	
+
 	// positions & dimensions of components
 	private int labelHeight = 15;
 	private int tfx0 = 20; // horizontal starting position
@@ -217,13 +218,13 @@ public class MainWindow extends JFrame {
 		mainW.setVisible(true);
 		mainW.setUp();
 	}
-	
+
 	/**
 	 * This method copies libespeakservice.so file to hidden folder where the
-	 * executable jar runs for passing all tests in Maven. It is required to have hidden
-	 * lib folder containing that file.
-	 * For proper work with code just create hiden .lib folder nearby Your project src folder
-	 * and copy libespeakservice.so from lib folder.
+	 * executable jar runs for passing all tests in Maven. It is required to
+	 * have hidden lib folder containing that file. For proper work with code
+	 * just create hiden .lib folder nearby Your project src folder and copy
+	 * libespeakservice.so from lib folder.
 	 */
 	
 
@@ -237,17 +238,6 @@ public class MainWindow extends JFrame {
 			}
 		}
 	}
-	
-
-	
-/*
- * This method copies files correct way. It is used for setUp() method.
- * 
- * 
- */
-	
-
-	
 	/**
 	 * This is an auxiliary method employed by setUp() method. It copies the
 	 * contents of hidden file passed as stream (first parameter) to the file
@@ -268,21 +258,19 @@ public class MainWindow extends JFrame {
 			logger.warn(e);
 		}
 	}
-	
+
 	/**
-	 * This method creates menu bar which contain
-	 * following menus: File, Speak, Voice, Options, Tools,
-	 * Compile and Help. All necessary menu items and
+	 * This method creates menu bar which contain following menus: File, Speak,
+	 * Voice, Options, Tools, Compile and Help. All necessary menu items and
 	 * separators for each of mentioned menus are created as well.
 	 */
-	
+
 	private void menuBarInit() {
 		mMenuBar = new JMenuBar();
-		
 		////////////////
 		// File group //
 		////////////////
-		
+
 		mnFile = new JMenu("File");
 		mMenuBar.add(mnFile);
 
@@ -291,7 +279,6 @@ public class MainWindow extends JFrame {
 
 		mntmOpen2 = new JMenuItem("Open2...");
 		mnFile.add(mntmOpen2);
-		
 
 		mntmExportGraph = new JMenuItem("Export graph");
 		mnFile.add(mntmExportGraph);
@@ -307,18 +294,18 @@ public class MainWindow extends JFrame {
 		mntmClose = new JMenuItem("Close");
 		mntmClose.setVisible(false);
 		mnFile.add(mntmClose);
-		
+
 		mntmCloseAll = new JMenuItem("Close all");
 		mntmCloseAll.setVisible(false);
 		mnFile.add(mntmCloseAll);
 
 		mntmQuit = new JMenuItem("Quit");
 		mnFile.add(mntmQuit);
-		
+
 		/////////////////
 		// Speak group //
 		/////////////////
-		
+
 		mnSpeak = new JMenu("Speak");
 		mMenuBar.add(mnSpeak);
 
@@ -346,11 +333,11 @@ public class MainWindow extends JFrame {
 		mntmStop = new JMenuItem("Stop");
 		mntmStop.setEnabled(false);
 		mnSpeak.add(mntmStop);
-		
+
 		/////////////////
 		// Voice group //
 		/////////////////
-		
+
 		mnVoice = new JMenu("Voice");
 		mMenuBar.add(mnVoice);
 
@@ -380,11 +367,11 @@ public class MainWindow extends JFrame {
 		groupOfVoices.add(rdbtnmntmRussian);
 		groupOfVoices.add(rdbtnmntmLatvian);
 		groupOfVoices.add(rdbtnmntmPolish);
-		
+
 		///////////////////
 		// Options group //
 		///////////////////
-		
+
 		mnOptions = new JMenu("Options");
 		mMenuBar.add(mnOptions);
 
@@ -437,11 +424,11 @@ public class MainWindow extends JFrame {
 
 		mntmSpeakCharacterName = new JMenuItem("Speak character name");
 		mnOptions.add(mntmSpeakCharacterName);
-		
+
 		/////////////////
 		// Tools group //
 		/////////////////
-		
+
 		mnTools = new JMenu("Tools");
 		mMenuBar.add(mnTools);
 
@@ -475,7 +462,7 @@ public class MainWindow extends JFrame {
 		///////////////////
 		// Compile group //
 		///////////////////
-		
+
 		mnCompile = new JMenu("Compile");
 		mMenuBar.add(mnCompile);
 
@@ -495,11 +482,10 @@ public class MainWindow extends JFrame {
 
 		mntmCompileIntonationData = new JMenuItem("Compile intonation data");
 		mnCompile.add(mntmCompileIntonationData);
-		
 		////////////////
 		// Help group //
 		////////////////
-		
+
 		mnHelp = new JMenu("Help");
 		mMenuBar.add(mnHelp);
 
@@ -541,12 +527,11 @@ public class MainWindow extends JFrame {
 	 */
 
 	public void bodyInit() {
-		
+
 		// TODO Implement "Amplitude frame" in bottom left corner.
-		
-		
+
 		// initiate keyframe sequence/prosody tab pane:
-		
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		// initiate keyframe sequence graph pane:
@@ -598,8 +583,8 @@ public class MainWindow extends JFrame {
 		///////////////////////////////////////////////
 		// formant parameter text fields with labels //
 		///////////////////////////////////////////////
-		
-		JLabel lblFreq = new JLabel("Frequency");
+
+		JLabel lblFreq = new JLabel("Formants");
 		lblFreq.setBounds(3, 6, 100, labelHeight);
 		lblFreq.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblFreq);
@@ -608,11 +593,11 @@ public class MainWindow extends JFrame {
 		lblHt.setBounds(80, 6, 50, labelHeight);
 		lblHt.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblHt);
-		
+
 		JLabel lblWidth = new JLabel("Width");
 		lblWidth.setBounds(135, 6, 42, labelHeight);
 		panel_Spect.add(lblWidth);
-		
+
 		JLabel lblklatt = new JLabel("(Klatt)");
 		lblklatt.setBounds(231, 6, 44, labelHeight);
 		panel_Spect.add(lblklatt);
@@ -660,21 +645,23 @@ public class MainWindow extends JFrame {
 		/////////////////////////////////////////////
 		// Klatt synthesis text fields with labels //
 		/////////////////////////////////////////////
-		
+
 		JLabel lblBw = new JLabel("Bw");
 		lblBw.setBounds(196, 31, 21, labelHeight);
 		lblBw.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblBw);
-		
+
 		JLabel lblAp = new JLabel("Ap");
 		lblAp.setBounds(247, 31, 18, labelHeight);
 		lblAp.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblAp);
-		
+
 		JLabel lblBp = new JLabel("Bp");
 		lblBp.setBounds(304, 31, 18, labelHeight);
 		lblBp.setFont(new Font(Texts.DIALOG.getText(), Font.BOLD, 12));
 		panel_Spect.add(lblBp);
+    
+		tfmS = new JTextField();
 		
 		for (int i = 1; i <= 3; i++) {
 			JTextField tfBwOption = new JTextField();
@@ -715,55 +702,55 @@ public class MainWindow extends JFrame {
 		tfmS.setHorizontalAlignment(SwingConstants.CENTER);
 		tfmS.setColumns(10);
 		panel_Spect.add(tfmS);
-		
+
 		JLabel lblMsTf = new JLabel("mS");
 		lblMsTf.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 21, labelHeight);
 		panel_Spect.add(lblMsTf);
-		
+
 		///////////////////////////////////////////////
 		// Additional parameter spinners with labels //
-		// (AV, Tilt, Avp, kopen, FNZ, Aspr...).	 //
+		// (AV, Tilt, Avp, kopen, FNZ, Aspr...). //
 		///////////////////////////////////////////////
-		
+    
 		spampF.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap), compWidth, compHeight);
 		spampF.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spampF);
-		
+
 		JSpinner spAV = new JSpinner();
 		spAV.setBounds(tfx0, tfy0 + 10 * (compHeight + tfygap), compWidth, compHeight);
 		spAV.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAV);
-		
+
 		JSpinner spFNZ = new JSpinner();
 		spFNZ.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap), compWidth, compHeight);
 		spFNZ.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spFNZ);
-		
+
 		JSpinner spTilt = new JSpinner();
 		spTilt.setBounds(tfx0, tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spTilt.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spTilt);
-		
+
 		JSpinner spAspr = new JSpinner();
 		spAspr.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spAspr.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAspr);
-		
+
 		JSpinner spSkew = new JSpinner();
 		spSkew.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap), compWidth, compHeight);
 		spSkew.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spSkew);
-		
+
 		JSpinner spAVp = new JSpinner();
 		spAVp.setBounds(tfx0, tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spAVp.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spAVp);
-		
+
 		JSpinner spFric = new JSpinner();
 		spFric.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spFric.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spFric);
-		
+
 		JSpinner spFricBP = new JSpinner();
 		spFricBP.setBounds(tfx0 + 4 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap), compWidth, compHeight);
 		spFricBP.setModel(new SpinnerNumberModel(0, 0, 500, 1));
@@ -773,108 +760,120 @@ public class MainWindow extends JFrame {
 		spkopen.setBounds(tfx0, tfy0 + 13 * (compHeight + tfygap), compWidth, compHeight);
 		spkopen.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spkopen);
-		
+
 		JSpinner spTurb = new JSpinner();
 		spTurb.setBounds(tfx0 + 2 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap), compWidth, compHeight);
 		spTurb.setModel(new SpinnerNumberModel(0, 0, 500, 1));
 		panel_Spect.add(spTurb);
-		
+
 		JLabel lblAmpF = new JLabel("% amp - Frame");
-		lblAmpF.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 103, labelHeight);
+		lblAmpF.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 9 * (compHeight + tfygap) + labelyOffset, 103,
+				labelHeight);
 		panel_Spect.add(lblAmpF);
-		
+
 		JLabel lblAv = new JLabel("AV");
 		lblAv.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
 		lblAv.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAv);
 
-
 		JLabel lblTilt = new JLabel("Tilt");
 		lblTilt.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 22, labelHeight);
 		lblTilt.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblTilt);
-		
+
 		JLabel lblAvp = new JLabel("AVp");
 		lblAvp.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 27, labelHeight);
 		lblAvp.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblAvp);
-		
+
 		JLabel lblKopen = new JLabel("kopen");
-		lblKopen.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblKopen.setBounds(tfx0 + tfxgap + compWidth, tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		lblKopen.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_Spect.add(lblKopen);
-		
+
 		JLabel lblFnz = new JLabel("FNZ");
 		lblFnz.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFnz.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFnz.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 10 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFnz);
-		
+
 		JLabel lblAspr = new JLabel("Aspr");
 		lblAspr.setHorizontalAlignment(SwingConstants.LEFT);
-		lblAspr.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblAspr.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblAspr);
-		
+
 		JLabel lblFric = new JLabel("Fric");
 		lblFric.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFric.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFric.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFric);
-		
+
 		JLabel lblTurb = new JLabel("Turb");
 		lblTurb.setHorizontalAlignment(SwingConstants.LEFT);
-		lblTurb.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblTurb.setBounds(tfx0 + 3 * (tfxgap + compWidth), tfy0 + 13 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblTurb);
-		
+
 		JLabel lblSkew = new JLabel("Skew");
 		lblSkew.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSkew.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblSkew.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 11 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblSkew);
-		
+
 		JLabel lblFricbp = new JLabel("FricBP");
 		lblFricbp.setHorizontalAlignment(SwingConstants.LEFT);
-		lblFricbp.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44, labelHeight);
+		lblFricbp.setBounds(tfx0 + 5 * (tfxgap + compWidth), tfy0 + 12 * (compHeight + tfygap) + labelyOffset, 44,
+				labelHeight);
 		panel_Spect.add(lblFricbp);
-		
+
 		// Zoom buttons //
-		
+
 		btnZoom = new JButton("Zoom-");
 		btnZoom.setBounds(tfx0, 405, 97, compHeight);
 		panel_Spect.add(btnZoom);
-		
+
 		btnZoom_1 = new JButton("Zoom+");
 		btnZoom_1.setBounds(120, 405, 97, compHeight);
 		panel_Spect.add(btnZoom_1);
-		
-		
-		// % amp - Sequence parameter at the bottom //
-		
-		JSpinner spampS = new JSpinner();
-		spampS.setModel(new SpinnerNumberModel(0, 0, 596, 1));
-		spampS.setBounds(tfx0, 450, compWidth, compHeight);
-		panel_Spect.add(spampS);
-		
+
 		JLabel lblAmpS = new JLabel("% amp - Sequence");
 		lblAmpS.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAmpS.setBounds(tfx0 + tfxgap + compWidth, 450, 139, labelHeight);
 		panel_Spect.add(lblAmpS);
-		
+
 		// A Label that obviously relates to "Amplitude frame", //
-		// witch is not implemented.							//
-		
-		JLabel lblMs = new JLabel("mS");
-		lblMs.setBounds(tfx0 + tfxgap + compWidth, 477, 21, labelHeight);
+		// witch is not implemented. - done //
+
+		JLabel lblMs = new JLabel("% mS - Sequence");
+		lblMs.setBounds(80, 477, 137, 23);
 		panel_Spect.add(lblMs);
+
+		// % amp - Sequence parameter at the bottom //
+
+		JSpinner spampS = new JSpinner();
+		spampS.setModel(new SpinnerNumberModel(0, 0, 596, 1));
+		spampS.setBounds(20, 446, compWidth, compHeight);
+		panel_Spect.add(spampS);
+
+		// % mS - Sequence parameter at the bottom //
+
+		JSpinner spms = new JSpinner();
+		spms.setModel(new SpinnerNumberModel(0, 0, 596, 1));
+		spms.setBounds(20, 481, compWidth, compHeight);
+		panel_Spect.add(spms);
 
 		//////////////////////////
 		//////// Text Tab ////////
 		//////////////////////////
-		
+
 		JPanel panelText = new JPanel();
 		panelText.setAutoscrolls(true);
 		tabbedPane.addTab("Text", null, panelText, null);
-		
-		
+
 		// Input text area:
-		
+
 		textAreaIn = new JTextArea();
 		textAreaIn.setText("Hello");
 		textAreaIn.setLineWrap(true);
@@ -883,7 +882,7 @@ public class MainWindow extends JFrame {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Output text area:
-		
+
 		textAreaOut = new JTextArea();
 		textAreaOut.setLineWrap(true);
 		textAreaOut.setWrapStyleWord(true);
@@ -891,7 +890,7 @@ public class MainWindow extends JFrame {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// Command buttons:
-		
+
 		btnSpeak = new JButton("");
 		btnPause = new JButton("");
 		btnPause.setEnabled(false);

@@ -1,23 +1,33 @@
 package org.espeakng.jeditor.data;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+
+import java.awt.Graphics2D;
+
 import java.awt.Polygon;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.espeakng.jeditor.gui.MainWindow;
+import org.espeakng.jeditor.gui.SpectrumGraph;
 import org.espeakng.jeditor.jni.Formant_t;
 import org.espeakng.jeditor.jni.Peak_t;
 
@@ -86,11 +97,13 @@ public class Graph {
 	private int sel_peak = 0;
 	private ArrayList<Frame> selectedFrames = new ArrayList<Frame>();
 	private ArrayList<Frame> copyFrames = new ArrayList<Frame>();
+	//private ArrayList<Frame> readyFrames = new ArrayList<Frame>();
+	private Map<Integer, ArrayList<Frame>> tabList = new HashMap<Integer, ArrayList<Frame>>();
 	int max_x = 0;
 	double max_y = 0;
 	boolean gridEnable = true;
 
-	
+		
 	/**
 	 * 
 	 * draws graphs in tabbedPaneGraphs in MainWindow
@@ -100,6 +113,7 @@ public class Graph {
 	 */
 	
 	public Graph(String fileName, ArrayList<Frame> frameList) {
+		//readyFrames = frameList;
 		repaintActive();
 		tabbedPaneGraphs = MainWindow.tabbedPaneGraphs;
 
@@ -114,7 +128,8 @@ public class Graph {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVisible(true);
-		MainWindow.getMainWindow().repaint();
+		
+		//MainWindow.getMainWindow().repaint();
 		
 		// for correct order i use LinkedHashMap, because hashMap not guarantee
 		// the insertion order.
@@ -124,10 +139,15 @@ public class Graph {
 
 		tabbedPaneGraphs.addTab(fileName, null, scrollPane, null);
 		tabbedPaneGraphs.setSelectedComponent(scrollPane);
-		
-		// filePanel.requestFocus();
+		tabList.put(tabbedPaneGraphs.getSelectedIndex(), frameList);
+	
+ 		// filePanel.requestFocus();
 		ShowFrames(frameList, filePanel, mapPanels);
-
+		
+	}
+	
+	public ArrayList<Frame> selectedTabList(int t){
+		return tabList.get(t);
 	}
 
 	class Draw extends JPanel {
@@ -182,6 +202,7 @@ public class Graph {
 							/ 18, keyframeHeight);
 				}
 			}
+			
 			for (int i = 0; i < 9; i++) {
 				if (i == sel_peak && currentFrame.selected) {
 					points[i][0] = (int) (peaks[i].pkfreq * scalex); // peak x
@@ -212,6 +233,7 @@ public class Graph {
 			}
 			drawFormants(g);
 			drawPeaks(peaks, g);
+			
 			// draws increments
 			g.setColor(Color.BLACK);
 			g.setFont(new Font(g.getFont().getFontName(), g.getFont()
@@ -219,9 +241,10 @@ public class Graph {
 			g.drawString(((int) (currentFrame.time * 1000)) + " ms" + "  "
 					+ ((int) currentFrame.pitch) + " hz", keyframeWidth
 					- keyframeWidth / 5, keyframeHeight / 5);
-			// before this rms needs to be calculated
-			//g.drawString(currentFrame.rms+" rms", keyframeWidth
-					//- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
+			
+			
+			//g.drawString(String.format("%.4f rms",currentFrame.rms), keyframeWidth
+			//		- keyframeWidth / 5, keyframeHeight / 5+g.getFont().getSize()+2);
 			int rectPosY = keyframeHeight / 10;
 			int rectPosX = keyframeWidth - keyframeWidth / 5 - rectPosY - 3;
 			for (int j = 0; j < 8; j++) {
@@ -237,6 +260,7 @@ public class Graph {
 					rectPosX -= rectPosY + 3;
 				}
 			}
+			
 		}
 
 		public void drawFormants(Graphics g) {
@@ -290,7 +314,7 @@ public class Graph {
 			int pkright;
 			int pkwidth;
 			int[] buf = new int[4000];
-			// double rms;
+			//double rms;
 			double max_x = currentFrame.max_x;
 
 			int frame_width = (int) ((keyframeWidth * max_x) / 9500);
@@ -338,7 +362,7 @@ public class Graph {
 			// rms = buf[0] >> 12;
 			// rms = rms * rms * 23;
 			// rms = rms * rms;
-
+			// rms = currentFrame.rms;
 			x1 = 0;
 			y1 = keyframeHeight - ((buf[0] * keyframeHeight) >> 21);
 			for (ix = 1; ix < max_ix; ix++) {
@@ -362,8 +386,10 @@ public class Graph {
 
 			// rms = GetRms(seq_amplitude);
 		} // end of SpectFrame::DrawPeaks
+		
+		
 	}
-
+	
 	double SpectTilt(int value, int freq, boolean bass_reduction) {
 		double x;
 		double y;
@@ -811,7 +837,9 @@ public class Graph {
 			final JPanel filePanel2, final Map<JPanel, Frame> mapPanels) {
 		filePanel2.removeAll();
 		mapPanels.clear();
+
 		Box.createVerticalBox();
+
 		Dimension size = new Dimension();
 		int y = 5;
 		if (!frames.isEmpty()) {
@@ -914,10 +942,20 @@ public class Graph {
 				
 			}
 			loadFirstFrame();
+		/*	
+			MainWindow.getMainWindow().panelSpectrumGraph = new SpectrumGraph(frames);
+			MainWindow.getMainWindow().panelSpectrumGraph.setBounds(3, 511, 364, 200);
+			MainWindow.getMainWindow().panelSpectrumGraph.setBackground(new Color(238, 238, 238));
+			MainWindow.getMainWindow().panel_Spect.add(MainWindow.getMainWindow().panelSpectrumGraph).repaint();
+			//MainWindow.getMainWindow().panel_Spect.repaint();
+			 */
 		}
+		// new ArrayList<Frame>(mapPanels.values())
+		
 		filePanel2.setPreferredSize(size);
 		filePanel2.revalidate();
 		filePanel2.repaint();
+		//MainWindow.getMainWindow().panelSpectrumGraph.repaint();
 		filePanel2.addKeyListener(keyListener);
 		// filePanel.requestFocus();
 
@@ -991,4 +1029,5 @@ public class Graph {
 			
 		}
 	}
+	
 }
